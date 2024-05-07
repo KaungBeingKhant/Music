@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Music Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        #video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .video-card {
+            width: 300px;
+            margin: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        iframe {
+            width: 100%;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>YouTube Music Player</h1>
+    </header>
+
+    <div id="video-container"></div>
+
+    <script>
+        // Function to fetch YouTube videos
+        function fetchYouTubeVideos() {
+            // Your YouTube API key
+            var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc';
+
+            // Fetch data from YouTube API (example: fetching music videos)
+            fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=music&type=video&key=' + apiKey)
+            .then(response => response.json())
+            .then(data => {
+                // Loop through fetched videos
+                data.items.forEach(item => {
+                    // Create a div for each video
+                    var videoCard = document.createElement('div');
+                    videoCard.className = 'video-card';
+
+                    // Create an iframe to embed the video
+                    var iframe = document.createElement('iframe');
+                    iframe.src = 'https://www.youtube.com/embed/' + item.id.videoId;
+                    iframe.allowFullscreen = true;
+
+                    // Append the iframe to the div
+                    videoCard.appendChild(iframe);
+
+                    // Append the div to the video container
+                    document.getElementById('video-container').appendChild(videoCard);
+                });
+            })
+            .catch(error => console.error('Error fetching YouTube videos:', error));
+        }
+
+        // Call the fetchYouTubeVideos function when the page loads
+        window.onload = fetchYouTubeVideos;
+    </script>
+</body>
+</html>
