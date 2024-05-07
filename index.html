@@ -78,25 +78,6 @@
             height: 200px;
             border: none;
         }
-        .buttons {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-        button {
-            background-color: transparent;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            font-size: 20px;
-            margin-left: 10px;
-        }
-        button:hover {
-            color: #007bff;
-        }
-        .watched {
-            opacity: 0.5;
-        }
     </style>
 </head>
 <body>
@@ -104,10 +85,6 @@
         <h1>MUSICA</h1>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Search for music..." onkeydown="handleKeyDown(event)">
-            <select id="download-type">
-                <option value="mp3">MP3</option>
-                <option value="mp4">MP4</option>
-            </select>
         </div>
     </header>
 
@@ -115,7 +92,6 @@
 
     <script>
         var player;
-        var playlist = [];
 
         // Function to fetch YouTube videos based on search query
         function searchYouTube() {
@@ -149,47 +125,9 @@
                         title.className = 'video-title';
                         title.textContent = item.snippet.title;
 
-                        // Create buttons for playlist, watch later, like/unlike
-                        var buttons = document.createElement('div');
-                        buttons.className = 'buttons';
-
-                        var playlistButton = document.createElement('button');
-                        playlistButton.textContent = '➕';
-                        playlistButton.title = 'Add to Playlist';
-                        playlistButton.onclick = function() {
-                            addToPlaylist(item.id.videoId, item.snippet.title);
-                        };
-
-                        var watchLaterButton = document.createElement('button');
-                        watchLaterButton.textContent = '⏱️';
-                        watchLaterButton.title = 'Watch Later';
-                        watchLaterButton.onclick = function() {
-                            addToWatchLater(item.id.videoId, item.snippet.title);
-                        };
-
-                        var likeButton = document.createElement('button');
-                        likeButton.textContent = '👍';
-                        likeButton.title = 'Like';
-                        likeButton.onclick = function() {
-                            likeVideo(item.id.videoId);
-                        };
-
-                        var downloadButton = document.createElement('button');
-                        downloadButton.textContent = '⬇️';
-                        downloadButton.title = 'Download';
-                        downloadButton.onclick = function() {
-                            downloadVideo(item.id.videoId);
-                        };
-
-                        buttons.appendChild(playlistButton);
-                        buttons.appendChild(watchLaterButton);
-                        buttons.appendChild(likeButton);
-                        buttons.appendChild(downloadButton);
-
                         // Append the elements to the video card
                         videoCard.appendChild(iframe);
                         videoCard.appendChild(title);
-                        videoCard.appendChild(buttons);
 
                         // Append the video card to the video container
                         document.getElementById('video-container').appendChild(videoCard);
@@ -231,30 +169,6 @@
             if (event.key === "Enter") {
                 searchYouTube();
             }
-        }
-
-        // Function to add a video to the playlist
-        function addToPlaylist(videoId, title) {
-            var video = { id: videoId, title: title };
-            playlist.push(video);
-            alert('Added to playlist: ' + title);
-        }
-
-        // Function to add a video to the watch later list
-        function addToWatchLater(videoId, title) {
-            alert('Added to Watch Later: ' + title);
-        }
-
-        // Function to like/unlike a video
-        function likeVideo(videoId) {
-            alert('Liked/Unliked video with ID: ' + videoId);
-        }
-
-        // Function to download a video in MP3 or MP4 format
-        function downloadVideo(videoId) {
-            var downloadType = document.getElementById('download-type').value;
-            var downloadUrl = 'https://www.yt-download.org/api/button/' + downloadType + '/' + videoId;
-            window.open(downloadUrl, '_blank');
         }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
