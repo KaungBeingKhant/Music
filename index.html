@@ -60,6 +60,7 @@
             padding: 20px;
         }
         .video-card {
+            position: relative;
             width: 300px;
             margin: 20px;
             padding: 15px;
@@ -77,6 +78,25 @@
             height: 200px;
             border: none;
         }
+        .buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        button:hover {
+            color: #007bff;
+        }
+        .watched {
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +111,7 @@
 
     <script>
         var player;
+        var playlist = [];
 
         // Function to fetch YouTube videos based on search query
         function searchYouTube() {
@@ -124,11 +145,41 @@
                         title.className = 'video-title';
                         title.textContent = item.snippet.title;
 
-                        // Append the iframe and title to the div
+                        // Create buttons for playlist, watch later, like/unlike
+                        var buttons = document.createElement('div');
+                        buttons.className = 'buttons';
+
+                        var playlistButton = document.createElement('button');
+                        playlistButton.textContent = '➕';
+                        playlistButton.title = 'Add to Playlist';
+                        playlistButton.onclick = function() {
+                            addToPlaylist(item.id.videoId, item.snippet.title);
+                        };
+
+                        var watchLaterButton = document.createElement('button');
+                        watchLaterButton.textContent = '⏱️';
+                        watchLaterButton.title = 'Watch Later';
+                        watchLaterButton.onclick = function() {
+                            addToWatchLater(item.id.videoId, item.snippet.title);
+                        };
+
+                        var likeButton = document.createElement('button');
+                        likeButton.textContent = '👍';
+                        likeButton.title = 'Like';
+                        likeButton.onclick = function() {
+                            likeVideo(item.id.videoId);
+                        };
+
+                        buttons.appendChild(playlistButton);
+                        buttons.appendChild(watchLaterButton);
+                        buttons.appendChild(likeButton);
+
+                        // Append the elements to the video card
                         videoCard.appendChild(iframe);
                         videoCard.appendChild(title);
+                        videoCard.appendChild(buttons);
 
-                        // Append the div to the video container
+                        // Append the video card to the video container
                         document.getElementById('video-container').appendChild(videoCard);
 
                         // Initialize the YouTube player for each iframe
@@ -168,6 +219,28 @@
             if (event.key === "Enter") {
                 searchYouTube();
             }
+        }
+
+        // Function to add a video to the playlist
+        function addToPlaylist(videoId, title) {
+            var video = { id: videoId, title: title };
+            playlist.push(video);
+            alert('Added to playlist: ' + title);
+        }
+
+        // Function to add a video to the watch later list
+        function addToWatchLater(videoId, title) {
+            alert('Added to Watch Later: ' + title);
+        }
+
+        // Function to like/unlike a video
+        function likeVideo(videoId) {
+            alert('Liked/Unliked video with ID: ' + videoId);
+        }
+
+        // Function to mark a video as watched
+        function markAsWatched(videoCard) {
+            videoCard.classList.add('watched');
         }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
