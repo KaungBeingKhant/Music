@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Music Player - Apple Theme</title>
+    <title>YouTube Music Player - Apple Music Theme</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #1c1c1e;
+            color: #fff;
         }
         header {
             background-color: #000;
@@ -30,19 +31,21 @@
             border-radius: 5px;
             margin-right: 10px;
             width: 300px;
+            background-color: #2c2c2e;
+            color: #fff;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
             border: none;
             border-radius: 5px;
-            background-color: #007bff;
+            background-color: #0070f3;
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #0051c2;
         }
         #video-container {
             display: flex;
@@ -54,9 +57,14 @@
             width: 300px;
             margin: 20px;
             padding: 15px;
-            background-color: #fff;
+            background-color: #2c2c2e;
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .video-title {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
         }
         iframe {
             width: 100%;
@@ -67,7 +75,7 @@
 </head>
 <body>
     <header>
-        <h1>YouTube Music Player</h1>
+        <h1>YouTube Music Player - Apple Music Theme</h1>
         <input type="text" id="search-input" placeholder="Search for music...">
         <button onclick="searchYouTube()">Search</button>
     </header>
@@ -102,8 +110,14 @@
                         iframe.src = 'https://www.youtube.com/embed/' + item.id.videoId;
                         iframe.allowFullscreen = true;
 
-                        // Append the iframe to the div
+                        // Create a title for the video
+                        var title = document.createElement('div');
+                        title.className = 'video-title';
+                        title.textContent = item.snippet.title;
+
+                        // Append the iframe and title to the div
                         videoCard.appendChild(iframe);
+                        videoCard.appendChild(title);
 
                         // Append the div to the video container
                         document.getElementById('video-container').appendChild(videoCard);
