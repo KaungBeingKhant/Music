@@ -121,10 +121,10 @@
                 var apiKey = 'YOUR_YOUTUBE_API_KEY';
 
                 // Fetch search suggestions from YouTube API
-                fetch('https://suggestqueries.google.com/complete/search?client=youtube&q=' + encodeURIComponent(query))
+                fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=' + encodeURIComponent(query) + '&key=' + apiKey)
                 .then(response => response.json())
                 .then(data => {
-                    var suggestions = data[1].map(item => item[0]);
+                    var suggestions = data.items.map(item => item.snippet.title);
                     displaySuggestions(suggestions);
                 })
                 .catch(error => console.error('Error fetching search suggestions:', error));
