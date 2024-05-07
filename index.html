@@ -52,19 +52,6 @@
             outline: none;
             background-color: #3d3d40;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background-color: #0070f3;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0051c2;
-        }
         #video-container {
             display: flex;
             flex-wrap: wrap;
@@ -95,8 +82,7 @@
     <header>
         <h1>MUSICA</h1>
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search for music...">
-            <button onclick="searchYouTube()">Search</button>
+            <input type="text" id="search-input" placeholder="Search for music..." onkeypress="handleKeyPress(event)">
         </div>
     </header>
 
@@ -173,6 +159,13 @@
         function onPlayerStateChange(event) {
             if (event.data === YT.PlayerState.ENDED) {
                 event.target.playVideo();
+            }
+        }
+
+        // Function to handle key press event (Enter key)
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                searchYouTube();
             }
         }
     </script>
