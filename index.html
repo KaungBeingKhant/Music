@@ -104,6 +104,10 @@
         <h1>MUSICA</h1>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Search for music..." onkeydown="handleKeyDown(event)">
+            <select id="download-type">
+                <option value="mp3">MP3</option>
+                <option value="mp4">MP4</option>
+            </select>
         </div>
     </header>
 
@@ -170,9 +174,17 @@
                             likeVideo(item.id.videoId);
                         };
 
+                        var downloadButton = document.createElement('button');
+                        downloadButton.textContent = '⬇️';
+                        downloadButton.title = 'Download';
+                        downloadButton.onclick = function() {
+                            downloadVideo(item.id.videoId);
+                        };
+
                         buttons.appendChild(playlistButton);
                         buttons.appendChild(watchLaterButton);
                         buttons.appendChild(likeButton);
+                        buttons.appendChild(downloadButton);
 
                         // Append the elements to the video card
                         videoCard.appendChild(iframe);
@@ -238,9 +250,11 @@
             alert('Liked/Unliked video with ID: ' + videoId);
         }
 
-        // Function to mark a video as watched
-        function markAsWatched(videoCard) {
-            videoCard.classList.add('watched');
+        // Function to download a video in MP3 or MP4 format
+        function downloadVideo(videoId) {
+            var downloadType = document.getElementById('download-type').value;
+            var downloadUrl = 'https://www.yt-download.org/api/button/' + downloadType + '/' + videoId;
+            window.open(downloadUrl, '_blank');
         }
     </script>
     <script src="https://www.youtube.com/iframe_api"></script>
