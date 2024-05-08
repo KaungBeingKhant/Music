@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Music Player - Apple Music Theme</title>
     <style>
+        /* CSS styles for the webpage */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1c1c1e;
-            color: #fff;
+            background-color: #1c1c1e; /* Dark background color */
+            color: #fff; /* White text color */
         }
         header {
-            background-color: #000;
+            background-color: #000; /* Black header background */
             color: #fff;
             padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow effect */
         }
         h1 {
             margin: 0;
@@ -38,20 +39,22 @@
             border-radius: 5px;
             margin-right: 10px;
             width: 300px;
-            background-color: #2c2c2e;
-            color: #fff;
+            background-color: rgba(255, 255, 255, 0.2); /* Transparent background */
+            color: #fff; /* White text color */
             padding-left: 40px;
-            background-image: url('https://img.icons8.com/pastel-glyph/64/ffffff/search--v1.png');
+            background-image: url('https://img.icons8.com/pastel-glyph/64/ffffff/search--v1.png'); /* Search icon */
             background-size: 20px;
             background-repeat: no-repeat;
             background-position: 10px center;
+            transition: background-color 0.3s; /* Smooth transition */
+            backdrop-filter: blur(10px); /* Blur effect */
         }
         input[type="text"]::placeholder {
-            color: #aaa;
+            color: rgba(255, 255, 255, 0.5); /* Placeholder text color */
         }
         input[type="text"]:focus {
             outline: none;
-            background-color: #3d3d40;
+            background-color: rgba(255, 255, 255, 0.3); /* Lighter background color when focused */
         }
         #video-container {
             display: flex;
@@ -64,9 +67,9 @@
             width: 300px;
             margin: 20px;
             padding: 15px;
-            background-color: #2c2c2e;
+            background-color: #2c2c2e; /* Dark gray background for video card */
             border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Shadow effect */
         }
         .video-title {
             margin-top: 10px;
@@ -78,67 +81,91 @@
             height: 200px;
             border: none;
         }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            color: #ccc;
+        }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header>
-        <h1>MUSICA</h1>
+        <h1>MUSICA</h1> <!-- Title of the website -->
+        <!-- Search container -->
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Search for music..." onkeydown="handleKeyDown(event)">
         </div>
     </header>
 
+    <!-- Container for displaying videos -->
     <div id="video-container"></div>
 
+    <!-- Loading indicator -->
+    <div class="loading" id="loading" style="display: none;">Loading...</div>
+
+    <!-- JavaScript -->
     <script>
         var player;
+        var nextPageToken = ''; // To store the token for the next page of results
+        var isLoading = false; // To track if data is being loaded
 
         // Function to fetch YouTube videos based on search query
         function searchYouTube() {
-            // Get the search query from the input field
-            var searchQuery = document.getElementById('search-input').value.trim();
+            var searchQuery = document.getElementById('search-input').value.trim(); // Get the search query from the input field
 
             if (searchQuery !== '') {
-                //  YouTube API key
-                var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc';
+                if (!isLoading) { // If data is not being loaded
+                    isLoading = true; // Set loading flag to true
+                    document.getElementById('loading').style.display = 'block'; // Show loading indicator
 
-                // Clear previous search results
-                document.getElementById('video-container').innerHTML = '';
+                    // YouTube API key
+                    var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc'; // Replace with your YouTube API key
 
-                // Fetch data from YouTube API based on search query
-                fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=' + encodeURIComponent(searchQuery) + '&type=video&key=' + apiKey)
-                .then(response => response.json())
-                .then(data => {
-                    // Loop through fetched videos
-                    data.items.forEach(item => {
-                        // Create a div for each video
-                        var videoCard = document.createElement('div');
-                        videoCard.className = 'video-card';
+                    // Construct the URL for fetching data
+                    var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + encodeURIComponent(searchQuery) + '&type=video&key=' + apiKey;
 
-                        // Create an iframe to embed the video
-                        var iframe = document.createElement('iframe');
-                        iframe.src = 'https://www.youtube.com/embed/' + item.id.videoId + '?enablejsapi=1';
-                        iframe.allowFullscreen = true;
+                    // If there is a nextPageToken, add it to the URL
+                    if (nextPageToken !== '') {
+                        url += '&pageToken=' + nextPageToken;
+                    }
 
-                        // Create a title for the video
-                        var title = document.createElement('div');
-                        title.className = 'video-title';
-                        title.textContent = item.snippet.title;
+                    // Fetch data from YouTube API
+                    fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update nextPageToken with the token for the next page of results
+                        nextPageToken = data.nextPageToken || '';
 
-                        // Append the elements to the video card
-                        videoCard.appendChild(iframe);
-                        videoCard.appendChild(title);
+                        data.items.forEach(item => { // Loop through fetched videos
+                            var videoCard = document.createElement('div'); // Create a div for each video
+                            videoCard.className = 'video-card'; // Add class for styling
 
-                        // Append the video card to the video container
-                        document.getElementById('video-container').appendChild(videoCard);
+                            var iframe = document.createElement('iframe'); // Create an iframe to embed the video
+                            iframe.src = 'https://www.youtube.com/embed/' + item.id.videoId + '?enablejsapi=1'; // Set source of iframe
+                            iframe.allowFullscreen = true; // Allow fullscreen mode
 
-                        // Initialize the YouTube player for each iframe
-                        initializePlayer(item.id.videoId);
+                            var title = document.createElement('div'); // Create a title for the video
+                            title.className = 'video-title'; // Add class for styling
+                            title.textContent = item.snippet.title; // Set video title
+
+                            videoCard.appendChild(iframe); // Append iframe to video card
+                            videoCard.appendChild(title); // Append title to video card
+
+                            document.getElementById('video-container').appendChild(videoCard); // Append video card to container
+
+                            initializePlayer(item.id.videoId); // Initialize the YouTube player for each iframe
+                        });
+                    })
+                    .catch(error => console.error('Error fetching YouTube videos:', error))
+                    .finally(() => {
+                        // After data is loaded, set loading flag to false and hide loading indicator
+                        isLoading = false;
+                        document.getElementById('loading').style.display = 'none';
                     });
-                })
-                .catch(error => console.error('Error fetching YouTube videos:', error));
+                }
             } else {
-                alert('Please enter a search query.');
+                alert('Please enter a search query.'); // Alert if search query is empty
             }
         }
 
@@ -167,10 +194,18 @@
         // Function to handle key down event
         function handleKeyDown(event) {
             if (event.key === "Enter") {
-                searchYouTube();
+                searchYouTube(); // Call search function when Enter key is pressed
             }
         }
+
+        // Function to detect when user scrolls to the bottom of the page
+        window.onscroll = function() {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                // If user scrolled to bottom, load more videos
+                searchYouTube();
+            }
+        };
     </script>
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api"></script> <!-- Include YouTube Iframe API -->
 </body>
 </html>
