@@ -91,6 +91,19 @@
         .download-link:hover {
             text-decoration: underline; /* Underline on hover */
         }
+        .download-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .download-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -100,14 +113,12 @@
         <!-- Search container -->
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Search for music..." onkeydown="handleKeyDown(event)">
+            <a href="download.html" class="download-button">Download</a> <!-- Download button -->
         </div>
     </header>
 
     <!-- Container for displaying videos -->
     <div id="video-container"></div>
-
-    <!-- Download link -->
-    <a href="download.html" class="download-link">Download YouTube Videos</a>
 
     <!-- JavaScript -->
     <script>
@@ -127,7 +138,7 @@
                     var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc'; // Replace with your YouTube API key
 
                     // Construct the URL for fetching data
-                    var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + encodeURIComponent(searchQuery) + '&type=video&key=' + apiKey;
+                    var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=' + encodeURIComponent(searchQuery) + '&type=video&key=' + apiKey;
 
                     // If there is a nextPageToken, add it to the URL
                     if (nextPageToken !== '') {
