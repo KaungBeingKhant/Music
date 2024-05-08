@@ -1,4 +1,27 @@
 <?php
+// Function to get video info
+function getYouTubeVideoInfo($videoId) {
+    $videoInfoUrl = "https://www.youtube.com/get_video_info?video_id={$videoId}";
+    $videoInfo = file_get_contents($videoInfoUrl);
+    parse_str($videoInfo, $videoData);
+    return $videoData;
+}
+
+// Function to choose highest quality video stream
+function getHighestQualityStream($streamData) {
+    $streams = [];
+    foreach ($streamData as $stream) {
+        parse_str($stream, $streamInfo);
+        $streams[] = $streamInfo;
+    }
+    // Sort streams by quality
+    usort($streams, function($a, $b) {
+        return $b['quality'] - $a['quality'];
+    });
+    return $streams[0]; // Return the highest quality stream
+}
+
+// Main code
 if(isset($_GET['url']) && !empty($_GET['url'])) {
     $videoUrl = $_GET['url'];
     
@@ -6,22 +29,16 @@ if(isset($_GET['url']) && !empty($_GET['url'])) {
     if (preg_match('/^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})$/', $videoUrl, $matches)) {
         $videoId = $matches[4];
         
-        // Fetch video information
-        $videoInfo = file_get_contents("https://www.youtube.com/get_video_info?video_id={$videoId}");
-        
-        parse_str($videoInfo, $videoData);
+        // Get video information
+        $videoData = getYouTubeVideoInfo($videoId);
         
         // Check if video is available
-        if ($videoData['status'] == 'ok' && isset($videoData['url_encoded_fmt_stream_map'])) {
-            // Get the URL of the video stream
+        if (isset($videoData['status']) && $videoData['status'] == 'ok' && isset($videoData['url_encoded_fmt_stream_map'])) {
+            // Get video streams
             $streamMap = explode(',', $videoData['url_encoded_fmt_stream_map']);
-            $streamData = [];
-            foreach ($streamMap as $stream) {
-                parse_str($stream, $streamData[]);
-            }
             
-            // Choose the highest quality video stream
-            $videoStream = $streamData[0]; // Assuming the first stream is the highest quality
+            // Choose highest quality stream
+            $videoStream = getHighestQualityStream($streamMap);
             
             // Set headers to force download
             header("Content-Type: video/mp4");
