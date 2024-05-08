@@ -81,10 +81,15 @@
             height: 200px;
             border: none;
         }
-        .loading {
-            text-align: center;
-            margin-top: 20px;
-            color: #ccc;
+        .download-link {
+            color: #007bff; /* Blue color for links */
+            text-decoration: none; /* Remove underline */
+            margin-top: 10px; /* Add some space between search and download link */
+            display: block; /* Make it a block element */
+            font-size: 16px;
+        }
+        .download-link:hover {
+            text-decoration: underline; /* Underline on hover */
         }
     </style>
 </head>
@@ -101,8 +106,8 @@
     <!-- Container for displaying videos -->
     <div id="video-container"></div>
 
-    <!-- Loading indicator -->
-    <div class="loading" id="loading" style="display: none;">Loading...</div>
+    <!-- Download link -->
+    <a href="download.html" class="download-link">Download YouTube Videos</a>
 
     <!-- JavaScript -->
     <script>
@@ -117,10 +122,9 @@
             if (searchQuery !== '') {
                 if (!isLoading) { // If data is not being loaded
                     isLoading = true; // Set loading flag to true
-                    document.getElementById('loading').style.display = 'block'; // Show loading indicator
 
                     // YouTube API key
-                    var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc'; // Replace with your YouTube API key
+                    var apiKey = 'AIzaSyC9ppK_4kYIOxsTfbYs1tfjnwpLXiM1IYc'; // Replace with YouTube API key
 
                     // Construct the URL for fetching data
                     var url = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + encodeURIComponent(searchQuery) + '&type=video&key=' + apiKey;
@@ -159,9 +163,8 @@
                     })
                     .catch(error => console.error('Error fetching YouTube videos:', error))
                     .finally(() => {
-                        // After data is loaded, set loading flag to false and hide loading indicator
+                        // After data is loaded, set loading flag to false
                         isLoading = false;
-                        document.getElementById('loading').style.display = 'none';
                     });
                 }
             } else {
