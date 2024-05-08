@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+    <style>
+        /* CSS styles for the webpage */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1c1c1e; /* Dark background color */
+            color: #fff; /* White text color */
+            text-align: center;
+        }
+        header {
+            background-color: #000; /* Black header background */
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow effect */
+        }
+        h1 {
+            margin: 0;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 300px;
+            background-color: rgba(44, 44, 46, 0.8); /* Dark gray background with transparency */
+            color: #fff; /* White text color */
+            transition: background-color 0.3s; /* Smooth transition */
+            backdrop-filter: blur(10px); /* Blur effect */
+        }
+        input[type="text"]::placeholder {
+            color: #aaa; /* Placeholder text color */
+        }
+        input[type="text"]:focus {
+            outline: none;
+            background-color: rgba(44, 44, 46, 0.6); /* Darker background color when focused */
+        }
+        .download-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff; /* Blue button color */
+            color: #fff; /* White text color */
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition */
+        }
+        .download-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>YouTube Downloader</h1> <!-- Title of the webpage -->
+    </header>
+
+    <!-- Main content -->
+    <div class="container">
+        <div class="input-container">
+            <input type="text" id="video-url" placeholder="Enter YouTube video URL...">
+        </div>
+        <button class="download-button" onclick="downloadVideo()">Download</button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function downloadVideo() {
+            var videoUrl = document.getElementById('video-url').value.trim();
+            if (videoUrl !== '') {
+                // Redirect to y2mate.com with the video URL
+                window.location.href = 'https://www.y2mate.com/en18/youtube-mp3/' + encodeURIComponent(videoUrl);
+            } else {
+                alert('Please enter a YouTube video URL.');
+            }
+        }
+    </script>
+</body>
+</html>
