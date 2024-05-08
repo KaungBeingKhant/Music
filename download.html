@@ -5,67 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Download YouTube Videos</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1c1c1e;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            text-align: center;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .download-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .download-button:hover {
-            background-color: #0056b3;
-        }
-        .search-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            margin-right: 10px;
-            width: 300px;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            padding-left: 40px;
-            background-image: url('https://img.icons8.com/pastel-glyph/64/ffffff/search--v1.png');
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            transition: background-color 0.3s;
-            backdrop-filter: blur(10px);
-        }
-        input[type="text"]::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-        input[type="text"]:focus {
-            outline: none;
-            background-color: rgba(255, 255, 255, 0.3);
-        }
+        /* Your CSS styles */
     </style>
 </head>
 <body>
@@ -78,12 +18,11 @@
     </div>
 
     <script>
-        // Function to handle download button click
         document.getElementById('download-button').addEventListener('click', function() {
             var url = document.getElementById('search-input').value.trim();
             if (url !== '') {
-                // Replace this with your download logic
-                alert('Downloading video from: ' + url);
+                // Redirect to the PHP script to handle the download
+                window.location.href = 'download.php?url=' + encodeURIComponent(url);
             } else {
                 alert('Please enter a YouTube video URL.');
             }
